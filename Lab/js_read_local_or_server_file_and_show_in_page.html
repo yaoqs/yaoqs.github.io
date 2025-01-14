@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<input type="file" id="file-input" />
+<h3>Contents of the file:</h3>
+<pre id="file-content"></pre>
+
+
+<script src="js/markdownParser.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+  //1
+  /*function readFile(filename){
+  var fso = new ActiveXObject("Scripting.FileSystemObject");
+  var f = fso.OpenTextFile(filename,1,-1);
+  var s = "";
+  while (!f.AtEndOfStream)
+  s += f.ReadLine()+"\n";
+  f.Close();
+  return s;
+  }
+  
+  var parser = new HyperDown,
+      html = parser.makeHtml(readFile("readme.md"));
+  
+  document.write(html);
+  
+  //2
+  var txt = '';
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function(){
+    if(xmlhttp.status == 200 && xmlhttp.readyState == 4){
+      txt = xmlhttp.responseText;
+    }
+  };
+  //xmlhttp.open("GET","readme.md",true);
+  //xmlhttp.send();
+  var parser2 = new HyperDown,
+      html2 = parser2.makeHtml(txt );
+  
+  document.write(html2);
+  */
+  //3
+  function readSingleFile(e) {
+    var file = e.target.files[0];
+    if (!file)
+      return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var contents = e.target.result;
+      displayContents(contents);
+    };
+    reader.readAsText(file);
+  }
+
+  function displayContents(contents) {
+    var element = document.getElementById('file-content');
+    // element.textContent = contents;
+    element.innerHTML = contents;
+  }
+
+  document.getElementById('file-input')
+    .addEventListener('change', readSingleFile, false);
+
+  //4
+  var url = "https://yaoqs.github.io/42/";	//https://www.dogedoge.com/
+  var htmlobj = $.ajax({ url: url, async: false });
+  var dataString = htmlobj.responseText;
+  document.write(dataString);
+
+  //5
+  //CORS
+  var url = 'https://yaoqs.github.io/';
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  //xhr.responseType = 'blob';
+  //xhr.setRequestHeader('X-Custom-Header', 'value');
+  xhr.onload = function (e) {
+    if (this.status == 200) {
+      console.log(this.responseText);
+    }
+  };
+  xhr.send();
+//var blob = new Blob([xhr.response], {type: 'image/png'});
+
+</script>
+
+</html>
