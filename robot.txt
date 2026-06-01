@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /lib
+Disallow: /css
+Disallow: /images
+Disallow: /js
+Disallow: /Lab
+Sitemap: sitemap.xml

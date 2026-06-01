@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+
+</head>
+
+<body>
+
+
+	<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script src="../js/hyperdown.Parser.js"></script>
+
+	<div id="HyperDown" width="50%" height="100%" style="float: left;position: absolute;">
+		<p> HyperDown.js<br>
+			======================<br>
+
+			这是 js 版本 HyperDown (使用CoffeeScript实现)<br>
+			### 浏览器中使用<br>
+
+			直接引用`Parser.js`即可<br>
+			======================================<br>
+		<div id="test"></div>
+		<script>
+			var url = "https://yaoqs.github.io/README.md";
+			var htmlobj = $.ajax({ url: url, async: false });
+
+			var parser = new HyperDown,
+				markdownText = htmlobj.responseText,
+				html = parser.makeHtml(markdownText);
+			document.getElementById("test").innerHTML = html;
+
+			/*var fileReader = new FileReader()
+					fileReader.readAsText(file)
+					fileReader.onload = function(){
+						console.log(fileReader.result)
+						var parser = new HyperDown,
+						markdownText=fileReader.result,
+						html = parser.makeHtml(markdownText);
+						document.getElementById("test").innerHTML=html;
+					}*/
+		</script>
+		</p>
+	</div>
+
+
+
+	<div id="m" width="50%" height="100%" style="float: left;position: relative;left: 50%;padding-left: 50pm;">
+
+		<input type="file" class="file" multiple>
+		<button>上传文件</button>
+		<div id="showDiv" style="float: inherit;"></div>
+		<img src="" alt="">
+
+		<script>
+			var fileInput = document.querySelector('.file')
+			var btn = document.querySelector('button')
+			//var showDiv = document.querySelector('div')
+			var img = document.querySelector('img')
+
+			btn.onclick = function () {
+				var fileReader = new FileReader()
+				console.log(fileInput.files[0].type)
+				if (fileInput.files[0].type.search("audio") == -1 || fileInput.files[0].type.search("video") == -1) {
+					if (fileInput.files[0].type.search("image") == -1) {
+						fileReader.readAsText(fileInput.files[0])
+						fileReader.onload = function () {
+							//console.log(fileReader.result)
+							document.getElementById("showDiv").innerHTML = fileReader.result
+						}
+					}
+					else if (fileInput.files[0].type.search("image") != -1) {
+						fileReader.readAsDataURL(fileInput.files[0])
+						fileReader.onload = function () {
+							console.log(fileReader.result)
+							img.src = fileReader.result
+						}
+					}
+				}
+				/*	{
+						fileReader.readAsDataURL(fileInput.files[0])
+						fileReader.onload = function(){
+							console.log(fileReader.result)
+							img.src = fileReader.result
+						}
+					}
+					{
+						filereader.readAsArrayBuffer(fileInput.files[0])
+						filereader.onload = function(){
+							console.log(filereader.result)
+							var blob = new Blob([filereader.result])
+							img.src = URL.createObjectURL(blob)
+						}
+					}*/
+			}
+
+		</script>
+
+
+	</div>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

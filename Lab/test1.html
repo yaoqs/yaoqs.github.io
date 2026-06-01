@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<title>test</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="referrer" content="origin" />
+	<meta property="og:description" content="" />
+	<meta http-equiv="Cache-Control" content="no-transform" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<style type="text/css">
+		body {
+			display: grid;
+			grid-template-rows: 100px auto 100px;
+		}
+
+		#content {
+			display: grid;
+			grid-template-columns: 50% 50%;
+		}
+
+		.frame {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			/*grid-template-rows: 100px auto 100px;*/
+			grid-row-gap: 20px;
+			grid-column-gap: 20px;
+			/*	grid-auto-flow: column dense;*/
+		}
+	</style>
+</head>
+
+<body onload="startTimer(15,0)" OVERFLOW-X: hidden; OVERFLOW: auto;>
+	<!--div 布局 http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html -->
+	<div id="header">
+		<div id="topbar"
+			style="border-top:groove;margin-top:10px;background-color:silver;border-bottom:ridge; padding-bottom:30px;padding-top:50px;">
+			<div id="logo" style="float:left;font-weight:bold;margin-left:10px;margin-right:20px"><a href="#">111</a>
+			</div>
+
+			<div id="buttons" style="float:right;margin-right:10px">
+				<a href="#" id="pause" onclick="pause();">Pause</a>
+				<a href="#" onclick="addminute();">+</a>
+				<a href="#" onclick="subminute();">-</a>
+				<a
+					href="javascript:void(s=prompt('Enter website address or search terms:','https://yaoqs.github.io'));t=prompt('Number of minutes:','15');location.href=document.location.href+'/'+((s!=null)?s:'');">New
+					Timer</a>
+			</div>
+			<div id="clock" style="float:right;font-weight:bold;margin-right:20px;"></div>
+			<script type="text/javascript">
+				var secondsleft, m, h, pretty;
+				var inter;
+				var clocktype;
+				function pause() {
+					var p = document.getElementById("pause");
+					if (p.innerHTML == "Pause") {
+						clearInterval(inter);
+						p.innerHTML = "Continue";
+					} else {
+						inter = setInterval("update()", 1000);
+						p.innerHTML = "Pause";
+					}
+				}
+				function addminute() {
+					secondsleft += 60;
+					updatedisplay();
+				}
+				function subminute() {
+					secondsleft -= Math.min(60, secondsleft);
+					updatedisplay();
+				}
+				function startTimer(mins, type) {
+					clocktype = type; // 0 for countdown, 1 for stopwatch
+					secondsleft = mins * 60;
+					clearInterval(inter);
+					updatedisplay();
+					inter = setInterval("update()", 1000);
+				}
+				function updatedisplay() {
+					document.getElementById("clock").innerHTML = prettyTime(secondsleft);
+					document.title = prettyTime(secondsleft);
+
+				}
+				function update() {
+					if (clocktype == 0) {
+						if (secondsleft > 0) { secondsleft -= 1 } else { onTimeout() };
+					} else {
+						secondsleft += 1;
+					}
+					updatedisplay();
+				}
+				function prettyTime(s) {
+					Number(s);
+					m = Math.floor(s / 60);
+					if (m >= 60) {
+						h = Math.floor(m / 60);
+						pretty = pre_z(h) + ":" + pre_z(m % 60) + ":" + pre_z(s % 60);
+					} else {
+						pretty = m + ":" + pre_z(s % 60);
+					}
+					//	Number(pretty);	
+					return pretty;
+				}
+				function pre_z(x) {
+					return (x < 10) ? "0" + x : x;
+				}
+				function onTimeout() {
+					pause();
+					alert("Time's up!");
+					opener = null;
+					window.close();
+				}
+
+			</script>
+			<script type="text/javascript">
+				var f = true;
+				window.onbeforeunload = function () {
+					if (f) {
+						return "*** Some webpages don't like frames very much. If you intended to close this page, please presss OK. Otherwise, press Cancel to use the timer ***";
+					}
+				}
+			</script>
+		</div>
+	</div>
+
+
+	<div id="content">
+		<!-- grid on-->
+		<div class="frame">
+			<textarea title="show" id="show"></textarea>
+
+			<div onclick="javascript:window.open('','_parent',''); window.close();alert($('#show').val());">
+			</div>
+			<button id="bgbottom" onclick="win()">popwin</button>
+			<script type="text/javascript">//learn window
+				function win() { window.open(prompt("https://yaoqs.github.io", "https://yaoqs.github.io"), "https://yaoqs.github.io", "height=400px,width=400px,top=100px,left=100px,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no"); }
+			</script>
+			<a href="#">#</a>
+			<div>
+				<a onclick="window.close();return false;" href="javascript:void(0)">close window</a>
+				<br />
+				<a onclick="window.open('#')" href="javascript:void(0)">JS : window.open('#')</a>
+				<br />
+				<a onclick="window.showModalDialog('#')" href="javascript:void(0)">
+					JS : window.showModalDialog('#')</a>
+				<br />
+				<a href="#" target="_blank">link(or Press ctrl)</a>
+			</div>
+
+
+			<div id="info"></div>
+			<script>
+				window.onload = function () {
+					if (window.opener != null) {
+						document.getElementById("info").innerHTML = "window.opener : " + window.opener;
+					}
+				}
+			</script>
+
+
+			<script>
+				var browserName = navigator.appName;
+				if (browserName == "Netscape") {
+					function closeme() {
+						window.open('', '_parent', '');
+						window.close();
+					}
+				}
+				else {
+					if (browserName == "Microsoft Internet Explorer") {
+						function closynoshowsme() {
+							window.opener = "whocares";
+							window.close();
+						}
+					}
+				}
+			</script>
+
+
+			<div>
+				<div id="nav" width=200px height=200px style="margin-top:50px;margin-left:100px;display:inline;"
+					onclick='javascript:document.write("<div onclick="+"history.go(-1);"+"><br>11</div>");'>11</div>
+				<script
+					type="text/javascript">//learn navigator and document,document.body and so on
+						document.getElementById("nav").innerHTML = navigator.appName + "<br>" + navigator.appCodeName + "<br>" + navigator.appVersion;</script>
+			</div>
+
+
+			<input type="button" value="close me 3" onclick="closeme();" />
+
+			<!--skin-->
+			<div class="frame"
+				style="grid-template-rows: 1fr 1fr;grid-auto-flow: row dense;grid-template-areas: 'a a' 'b c';">
+				<span style="border:none;width:95px;"><strong>选择背景：</strong></span>
+				<div></div>
+				<div id="skin"
+					style="display: inline-grid;grid-template-columns: repeat(auto-fill, 20px);grid-template-rows: repeat(auto-fill, 20px);">
+
+					<div style="background-color:#198601;height:10px;width:10px"
+						onclick="javascript:setBackground('198601');">
+					</div>
+					<div style="background-color:#000000;height:10px;width:10px"
+						onclick="javascript:setBackground('000000');">
+					</div>
+					<div style="background-color:#098df3;height:10px;width:10px"
+						onclick="javascript:setBackground('098df3');">
+					</div>
+					<div style="background-color:#f10a0a;height:10px;width:10px"
+						onclick="javascript:setBackground('f10a0a');">
+					</div>
+					<div style="background-color:#f10a0a;height:10px;width:10px"
+						onclick="javascript:setBackground('f10a0a');">
+					</div>
+					<div style="background-color:#f5be08;height:10px;width:10px"
+						onclick="javascript:setBackground('f5be08');">
+					</div>
+					<div style="background-color:#ce0c7d;height:10px;width:10px"
+						onclick="javascript:setBackground('ce0c7d');">
+					</div>
+					<div style="background-color:#72e712;height:10px;width:10px"
+						onclick="javascript:setBackground('72e712');">
+					</div>
+					<div style="background-color:#882df0;height:10px;width:10px"
+						onclick="javascript:setBackground('882df0');">
+					</div>
+					<div style="background-color:#e98706;height:10px;width:10px"
+						onclick="javascript:setBackground('e98706');">
+					</div>
+					<div style="background-color:#eefaff;height:10px;width:10px"
+						onclick="javascript:setBackground('eefaff');">
+					</div>
+
+				</div>
+
+				<div onclick="javascript:bgimage();">bgimage</div>
+				<script>
+					function setBackground(color) { document.bgColor = "#" + color; document.body.style.background = null; };
+					function bgskin() {
+						document.write('<link href="red.css" rel="stylesheet" type="text\/css" media="all" \/><script>window.parent.div["skin"].location.reload();<\/script>');
+					};
+					//<link href="http:\/\/www.kenwen.com\/css\/read.css" rel="stylesheet" type="text\/css" media="all" \/>
+					function bgimage() {
+						document.body.style.background = "no-repeat url(bg_02.jpg) 50% 50%";
+						//document.body.style.background ="display: block;background: #000000 url(digitalrain.gif) no-repeat fixed center;";
+					};
+				</script>
+			</div>
+
+		</div>
+
+		<div>
+			<!-- http://jssdk.sinaapp.com/widget/weiboshow.php -->
+			<script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+			<wb:show uid="1262655355" width="auto" verifier="47bdb406" fans="0"></wb:show>
+
+		</div>
+	</div>
+
+
+	<!--右下角人物 -->
+	<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+	<!--小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json-->
+	<!--萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json-->
+	<!--小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json-->
+	<!--小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json-->
+	<!--初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json-->
+	<!-- 上边的不同链接显示的是不同的小人，这个可以根据需要来选择 下边的初始化部分，可以修改宽高来修改小人的大小，或者是鼠标移动到小人上的透明度，也可以修改小人在页面出现的位置。 -->
+	<script>    /*https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json*/
+		L2Dwidget.init({
+			"model": { jsonPath: "https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json", "scale": 1 },
+			"display": { "position": "left", "width": 66, "height": 88, "hOffset": 10, "vOffset": 20 },
+			"mobile": { "show": true, "scale": 0.5 },
+			"react": { "opacityDefault": 0.8, "opacityOnHover": 0.1 }
+		});
+	</script>
+	<div onclick="sAlert('d')">nihao</div>
+	<script>
+
+		function sAlert(str) {
+			var msgw, msgh, bordercolor;
+			msgw = 400;//提示窗口的宽度
+			msgh = 100;//提示窗口的高度
+			titleheight = 25; //提示窗口标题高度
+			bordercolor = "#007ECE";//提示窗口的边框颜色
+			titlecolor = "#99CCFF";//提示窗口的标题颜色
+
+
+			var sWidth, sHeight;
+			sWidth = document.body.offsetWidth - 25;
+			sHeight = document.body.scrollHeight;
+			var bgObj = document.createElement("div");
+			bgObj.setAttribute("id", "bgDiv");
+			bgObj.style.position = "absolute";
+			bgObj.style.top = "0";
+			bgObj.style.background = "#777";
+			bgObj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=0,finishOpacity=0)";
+			bgObj.style.opacity = "0.6";
+			bgObj.style.left = "0";
+			bgObj.style.width = sWidth + "px";
+			bgObj.style.height = sHeight + "px";
+			bgObj.style.zIndex = "10000";
+			document.body.appendChild(bgObj);
+
+
+			var msgObj = document.createElement("div")
+			msgObj.setAttribute("id", "msgDiv");
+			msgObj.setAttribute("align", "center");
+			msgObj.style.background = "white";
+			msgObj.style.border = "1px solid " + bordercolor;
+			msgObj.style.position = "absolute";
+			msgObj.style.left = "50%";
+			msgObj.style.top = document.body.scrollTop + document.body.clientHeight / 2;
+			msgObj.style.font = "12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif";
+			msgObj.style.marginLeft = "-225px";
+			msgObj.style.marginTop = -75 + document.documentElement.scrollTop + "px";
+			msgObj.style.width = msgw + "px";
+			msgObj.style.height = msgh + "px";
+			msgObj.style.textAlign = "center";
+			msgObj.style.lineHeight = "25px";
+			msgObj.style.zIndex = "10001";
+
+			var title = document.createElement("h4");
+			title.setAttribute("id", "msgTitle");
+			title.setAttribute("align", "right");
+			title.style.margin = "0";
+			title.style.padding = "3px";
+			title.style.background = bordercolor;
+			title.style.filter = "progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);";
+			title.style.opacity = "0.75";
+			title.style.border = "1px solid " + bordercolor;
+			title.style.height = "18px";
+			title.style.font = "12px Verdana, Geneva, Arial, Helvetica, sans-serif";
+			title.style.color = "white";
+			title.style.cursor = "pointer";
+			title.innerHTML = "关闭";
+			title.onclick = function () {
+				document.body.removeChild(bgObj);
+				document.getElementById("msgDiv").removeChild(title);
+				document.body.removeChild(msgObj);
+			}
+			document.body.appendChild(msgObj);
+			document.getElementById("msgDiv").appendChild(title);
+			var txt = document.createElement("p");
+			txt.style.margin = "1em 0"
+			txt.setAttribute("id", "msgTxt");
+			txt.innerHTML = str;
+			document.getElementById("msgDiv").appendChild(txt);
+		}
+		{ }
+
+	</script>
+</body>
+
+</html>
